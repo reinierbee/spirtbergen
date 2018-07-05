@@ -2,6 +2,8 @@
 
 from phue import Bridge
 import random
+import threading
+
 
 #Connection
 b = Bridge('ip_of_your_bridge')
@@ -51,6 +53,8 @@ def northernlightsRoutine():
     ylight = uniform(0.75, 0.51)
     bightness = randrange(30,100)
     flowTime = randrange(30,70)
-    dimmedTime = randrange(0,30)
-    
+    dimmedTime = choice([0,0,0,0,0,0,0,10,10,20,30,100])
+    totalTime = flowTime + dimmedTime
 
+    northerlightsFlow(xlight,ylight,birghtness,flowTime)
+    threading.Timer((totalTime/10), northernlightsRoutine).start()
