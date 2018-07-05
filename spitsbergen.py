@@ -3,7 +3,7 @@
 from phue import Bridge
 import random
 import threading
-
+import time
 
 #Connection
 b = Bridge('ip_of_your_bridge')
@@ -11,13 +11,55 @@ b.connect()
 
 #Light group settings
 
-#Lights
 
 #Timing
 
+startOfDayHours = "13"
+startOfDayMinutes = "00"
+startOfDayTransitionTime = 1800
+startOfDayTransitionTimeM = startOfDayTransitionTime/60
+
+endOfDayHours = "17"
+endOfDayMinutes = "30"
+endOfDayTransitionTime = 1800
+endOfDayTransitionTimeM = endOfDayTransitionTime/60
+
+
+#Lights
+dayX = 
+dayY =
+
+nightX =
+nightY =
+
+startOfDayLight = {'transitiontime' : (startOfDayTransitionTime*10), 'on' : True, 'bri' : 100, 'xy' : [dayX,dayY]}
+endOfDayLight = {'transitiontime' : (endOfDayTransitionTime*10), 'on' : True, 'bri' : 100, 'xy' : [nightX,nightY]}
+
+startOfDayTime = "T"+ startOfDayHours +":"+ startOfDayMinutes +":00"
+endOfDayTime = "T"+ endOfDayHours +":"+ endOfDayMinutes +":00"
+
+
+#int(float())
+
+
+
+def groupReset():
+    b.delete_group(1)
+    b.create_group('all', [1,2,3,4,5])
+    b.set_group(1, 'on', True, 'bri' : 100,)
+
+
+#planner
+def planner():
+    b.delete_schedule(1)
+    today = time.strftime("%Y-%m-%d")
+    b.create_schedule('Start of day', today + startOfDayLight, 1, startOfDayLight)
+    b.create_schedule('End of day', today + endOfDayLight, 1, endOfDayLight)
+    #rescedule this every 4 hours to be sure we queue up again on the right time
+    threading.Timer(14400, planner).start()
+
+
 #northernlights
-
-
 def northernlightsFlow(x, y, bightness, flowTime):
     l1Time = randrange(0,flowTime)
     remainder = flowTime - l1Time
@@ -41,16 +83,10 @@ def northernlightsFlow(x, y, bightness, flowTime):
     b.set_light(4, l4)
     b.set_light(5, l5)
 
-
-
-
-
-
-
 def northernlightsRoutine():
 
-    xlight = uniform(0.15, 0.23)
-    ylight = uniform(0.75, 0.51)
+    xlight = uniform(0.05, 0.20)
+    ylight = uniform(0.65, 0.35)
     bightness = randrange(30,100)
     flowTime = randrange(30,70)
     dimmedTime = choice([0,0,0,0,0,0,0,10,10,20,30,100])
@@ -58,3 +94,7 @@ def northernlightsRoutine():
 
     northerlightsFlow(xlight,ylight,birghtness,flowTime)
     threading.Timer((totalTime/10), northernlightsRoutine).start()
+
+#Do all routines
+planner()
+northernlightsRoutine()
