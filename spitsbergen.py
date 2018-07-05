@@ -3,10 +3,13 @@
 from phue import Bridge
 import random
 import threading
-import time
+from numpy import random
+from random import randrange
+from datetime import datetime, time
+from time import gmtime, strftime
 
 #Connection
-b = Bridge('ip_of_your_bridge')
+b = Bridge('192.168.2.3')
 b.connect()
 
 #Light group settings
@@ -14,26 +17,31 @@ b.connect()
 
 #Timing
 
-startOfDayHours = "13"
-startOfDayMinutes = "00"
+startOfDayHours = "23"
+startOfDayMinutes = "20"
 startOfDayTransitionTime = 1800
 startOfDayTransitionTimeM = startOfDayTransitionTime/60
 
-endOfDayHours = "17"
-endOfDayMinutes = "30"
-endOfDayTransitionTime = 1800
-endOfDayTransitionTimeM = endOfDayTransitionTime/60
+endOfDayHours = "23"
+endOfDayMinutes = "21"
+endOfDayTransitionTime = 60
+endOfDayTransition = time(23,22)
+endOfNothernlights = time(23,24)
 
-onTime = time(int(float(startOfDayHours))),int(float(startOfDayMinutes)))
-offTime = time(int(float(endOfDayHours))) + 1,int(float(endOfDayMinutes)))
+onTime = time(23,20)
+offTime = time(23,22)
 
+
+
+#onTime = time(13,00)
+#offTime = time(17,30)
 
 #Lights
 dayX = 0.4500
-dayY = 0.4000
+dayY = 0.3500
 
-nightX = 0.4500
-nightY = 0.4000
+nightX = 0.5500
+nightY = 0.3900
 
 startOfDayLight = {'transitiontime' : (startOfDayTransitionTime*10), 'on' : True, 'bri' : 100, 'xy' : [dayX,dayY]}
 endOfDayLight = {'transitiontime' : (endOfDayTransitionTime*10), 'on' : True, 'bri' : 100, 'xy' : [nightX,nightY]}
@@ -49,15 +57,15 @@ endOfDayTime = "T"+ endOfDayHours +":"+ endOfDayMinutes +":00"
 def groupReset():
     b.delete_group(1)
     b.create_group('all', [1,2,3,4,5])
-    b.set_group(1, 'on', True, 'bri' : 100,)
+    #b.set_group(1, 'on', True, 'bri' : 100)
 
 
 #planner
 def planner():
     b.delete_schedule(1)
-    today = time.strftime("%Y-%m-%d")
-    b.create_schedule('Start of day', today + startOfDayLight, 1, startOfDayLight)
-    b.create_schedule('End of day', today + endOfDayLight, 1, endOfDayLight)
+    today = strftime("%Y-%m-%d", gmtime())
+    #b.create_schedule('Start of day', today + startOfDayTime, 1, startOfDayLight)
+    b.create_schedule('End of day', today + endOfDayTime, 1, endOfDayLight)
     #rescedule this every 4 hours to be sure we queue up again on the right time
     threading.Timer(14400, planner).start()
 
@@ -74,19 +82,23 @@ def isnight(time_to_check, on_time, off_time):
     return False
 
 def dayTimeRoutine():
-    threading.Timer(10.0, dayTimeRoutine).start()
+    threading.Timer(30.0, dayTimeRoutine).start()
 
-    if isnight(datetime.now().time(), on_time, off_time):
+    if isnight(datetime.now().time(), onTime, offTime):
         print("Night Time detected.")
-        b.set_light([1,2,3],nightTimeLight)
+        if datetime.now().time() > endOfNothernlights:
+            b.set_light([1,2,3],nightTimeLight)
+        else:
+            print("Nothern lightsssss")
+            #northernlightsRoutine()
     else:
         print("Day Time detected.")
-        if datetime.now().time() < day_time_nothing
-            b.set_light([1,2,3],dayTimeLight)
+        #if datetime.now().time() > onTime + startOfDayTransitionTimeM
+        b.set_light([1,2,3],startOfDayLight)
 
 
 #northernlights
-def northernlightsFlow(x, y, bightness, flowTime):
+def northernlightsFlow(x, y, brightness, flowTime):
     l1Time = randrange(0,flowTime)
     remainder = flowTime - l1Time
     l2Time = randrange(0,remainder)
@@ -94,7 +106,7 @@ def northernlightsFlow(x, y, bightness, flowTime):
     l3Time = randrange(0,remainder)
     remainder = remainder - l3Time
     l4Time = randrange(0,remainder)
-    remainder = remaider - l4Time
+    remainder = remainder - l4Time
     l5Time = remainder
 
     l1 =  {'transitiontime' : l1Time, 'on' : True, 'bri' : brightness, 'xy' : [x,y] }
@@ -111,17 +123,18 @@ def northernlightsFlow(x, y, bightness, flowTime):
 
 def northernlightsRoutine():
 
-    xlight = uniform(0.05, 0.20)
-    ylight = uniform(0.65, 0.35)
-    bightness = randrange(30,100)
+    xlight = random.uniform(0.05, 0.20)
+    ylight = random.uniform(0.65, 0.35)
+    brightness = randrange(30,100)
     flowTime = randrange(30,70)
-    dimmedTime = choice([0,0,0,0,0,0,0,10,10,20,30,100])
+    dimmedTime = random.choice([0,0,0,0,0,0,0,10,10,20,30,100])
     totalTime = flowTime + dimmedTime
 
-    northerlightsFlow(xlight,ylight,birghtness,flowTime)
+    northernlightsFlow(xlight,ylight,brightness,flowTime)
     threading.Timer((totalTime/10), northernlightsRoutine).start()
 
 #Do all routines
-#planner()
-northernlightsRoutine()
-#daytimeRoutine()
+planner()
+#northernlightsRoutine()
+dayTimeRoutine()
+
