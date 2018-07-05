@@ -24,13 +24,16 @@ endOfDayMinutes = "30"
 endOfDayTransitionTime = 1800
 endOfDayTransitionTimeM = endOfDayTransitionTime/60
 
+onTime = time(int(float(startOfDayHours))),int(float(startOfDayMinutes)))
+offTime = time(int(float(endOfDayHours))) + 1,int(float(endOfDayMinutes)))
+
 
 #Lights
-dayX = 
-dayY =
+dayX = 0.4500
+dayY = 0.4000
 
-nightX =
-nightY =
+nightX = 0.4500
+nightY = 0.4000
 
 startOfDayLight = {'transitiontime' : (startOfDayTransitionTime*10), 'on' : True, 'bri' : 100, 'xy' : [dayX,dayY]}
 endOfDayLight = {'transitiontime' : (endOfDayTransitionTime*10), 'on' : True, 'bri' : 100, 'xy' : [nightX,nightY]}
@@ -59,6 +62,29 @@ def planner():
     threading.Timer(14400, planner).start()
 
 
+def isnight(time_to_check, on_time, off_time):
+    if time_to_check > onTime and time_to_check < offTime:
+        return False
+
+    if time_to_check > offTime or time_to_check < onTime:
+        return True
+
+    if time_to_check == onTime:
+        return False
+    return False
+
+def dayTimeRoutine():
+    threading.Timer(10.0, dayTimeRoutine).start()
+
+    if isnight(datetime.now().time(), on_time, off_time):
+        print("Night Time detected.")
+        b.set_light([1,2,3],nightTimeLight)
+    else:
+        print("Day Time detected.")
+        if datetime.now().time() < day_time_nothing
+            b.set_light([1,2,3],dayTimeLight)
+
+
 #northernlights
 def northernlightsFlow(x, y, bightness, flowTime):
     l1Time = randrange(0,flowTime)
@@ -74,14 +100,14 @@ def northernlightsFlow(x, y, bightness, flowTime):
     l1 =  {'transitiontime' : l1Time, 'on' : True, 'bri' : brightness, 'xy' : [x,y] }
     l2 =  {'transitiontime' : l2Time, 'on' : True, 'bri' : brightness, 'xy' : [x,y] }
     l3 =  {'transitiontime' : l3Time, 'on' : True, 'bri' : brightness, 'xy' : [x,y] }
-    l4 =  {'transitiontime' : l4Time, 'on' : True, 'bri' : brightness, 'xy' : [x,y] }
-    l5 =  {'transitiontime' : l5Time, 'on' : True, 'bri' : brightness, 'xy' : [x,y] }
+    #l4 =  {'transitiontime' : l4Time, 'on' : True, 'bri' : brightness, 'xy' : [x,y] }
+    #l5 =  {'transitiontime' : l5Time, 'on' : True, 'bri' : brightness, 'xy' : [x,y] }
 
     b.set_light(1, l1)
     b.set_light(2, l2)
     b.set_light(3, l3)
-    b.set_light(4, l4)
-    b.set_light(5, l5)
+    #b.set_light(4, l4)
+    #b.set_light(5, l5)
 
 def northernlightsRoutine():
 
@@ -96,5 +122,6 @@ def northernlightsRoutine():
     threading.Timer((totalTime/10), northernlightsRoutine).start()
 
 #Do all routines
-planner()
+#planner()
 northernlightsRoutine()
+#daytimeRoutine()
