@@ -61,7 +61,10 @@ Update code by pulling it from github
 git pull
 ```
 
-reboot machine
+run from command line (testing purposes) or reboot machine
+```
+python spitsbergen.py
+```
 ```
 reboot -i
 ```
