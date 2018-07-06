@@ -16,10 +16,9 @@ This repo has all instructions to operate and program the lights during the expo
 
 ## Timing
 
-Lights will start to enable at 13:00 and slowly build up to full daylight at 17:30 lights start to dimm back to night time.
-Fallback mechanism, between 13:30 and 17:30 the code will know its daylight and recovers to that state in case of emergency.
-Between 18:30 - night time is enabled and the code will reset state to night time.
+Lights will start to dimm to night time from 13:00 to 18:00.
 
+Fallback mechanism, system will boot with day time enabled and will poll to check for either northernlights or night time mode.
 18:00 - 18:30 northernlight simulation is showns.
 
 
@@ -38,3 +37,30 @@ pip install phue
 ### Run
 
 python spitsbergen.py
+
+### Updating the code
+
+Open terminal 
+```
+ctrl+alt+t
+```
+
+Connect with ssh to device and enter password
+```
+ssh pi@192.168.2.5
+```
+
+Go to directory
+```
+cd ~/pihue/spitsbergen
+```
+
+Update code by pull it from github
+```
+git pull
+```
+
+reboot machine
+```
+reboot -i
+```
