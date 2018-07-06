@@ -18,8 +18,9 @@ This repo has all instructions to operate and program the lights during the expo
 
 Lights will start to dimm to night time from 13:00 to 18:00.
 
-Fallback mechanism, system will boot with day time enabled and will poll to check for either northernlights or night time mode.
-18:00 - 18:30 northernlight simulation is showns.
+Fallback mechanism, system will boot with day light enabled and will poll to check for either northernlights or night time mode. If the system was rebooted during the transistion it will not continue to dimm but reset it to day light.
+
+Between 18:00 - 18:30 northernlight simulation is showns.
 
 
 ## Installation
@@ -45,7 +46,7 @@ Open terminal
 ctrl+alt+t
 ```
 
-Connect with ssh to device and enter password
+Connect with ssh to raspberry pi device and enter the password
 ```
 ssh pi@192.168.2.5
 ```
@@ -55,7 +56,7 @@ Go to directory
 cd ~/pihue/spitsbergen
 ```
 
-Update code by pull it from github
+Update code by pulling it from github
 ```
 git pull
 ```
