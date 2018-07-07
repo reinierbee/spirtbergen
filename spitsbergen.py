@@ -71,10 +71,10 @@ def planner():
 
 
 def is_night(time_to_check):
-    if time_to_check > end_of_night_transition or time_to_check < start_of_night_transition:
+    if time_to_check > end_of_night_transition or time_to_check < start_of_daytime:
         return True
 
-    if time_to_check > start_of_night_transition and time_to_check < end_of_night_transition:
+    if time_to_check > start_of_daytime and time_to_check < end_of_night_transition:
         return False
 
     if time_to_check == end_of_night_transition:
