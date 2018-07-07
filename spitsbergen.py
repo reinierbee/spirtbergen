@@ -59,10 +59,13 @@ def bootstrap():
 
 #planner
 def planner():
-    b.delete_schedule(1)
     today = strftime("%Y-%m-%d", gmtime())
     date_time = today + end_of_day_time
     b.create_schedule('End of day', date_time, 1, start_of_night_light)
+    b.create_schedule('End of day', date_time, 2, start_of_night_light)
+    b.create_schedule('End of day', date_time, 3, start_of_night_light)
+    b.create_schedule('End of day', date_time, 4, start_of_night_light)
+    b.create_schedule('End of day', date_time, 5, start_of_night_light)
 
     print("Planned new event for: " + date_time)
     print("Duration : ")
@@ -121,23 +124,23 @@ def northernlights_flow(x, y, brightness, flow_time):
     l4 =  {'transitiontime' : l4Time, 'on' : True, 'bri' : brightness, 'xy' : [x,y] }
     l5 =  {'transitiontime' : l5Time, 'on' : True, 'bri' : brightness, 'xy' : [x,y] }
 
-    b.set_light(1, l1)
-    b.set_light(2, l2)
-    b.set_light(3, l3)
-    b.set_light(4, l4)
-    b.set_light(5, l5)
+    b.set_light(2, l1)
+    b.set_light(5, l2)
+    b.set_light(1, l3)
+    b.set_light(3, l4)
+    b.set_light(4, l5)
 
 def northernlights_routine():
     if can_i_has_nothernlights:
         xlight = random.uniform(0.05, 0.20)
         ylight = random.uniform(0.65, 0.35)
         brightness = randrange(30,100)
-        flow_time = randrange(30,70)
+        flow_time = randrange(300,700)
         dimmed_time = random.choice([0,0,0,0,0,0,0,10,10,20,30,100])
-        totalTime = flow_time + dimmed_time
+        totalTime = flow_time
 
         northernlights_flow(xlight, ylight, brightness, flow_time)
-        threading.Timer((totalTime/10), northernlights_routine).start()
+        threading.Timer((totalTime/10) + dimmed_time, northernlights_routine).start()
     else:
         return
 
