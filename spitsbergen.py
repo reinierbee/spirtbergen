@@ -13,37 +13,45 @@ b.connect()
 
 #Timing
 
-
-start_of_night_transition_hours = "09"
-start_of_night_transition_minutes = "40"
+start_of_day_hours = "13"
+start_of_day_light = "00"
+start_of_night_transition_hours = "17"
+start_of_night_transition_minutes = "00"
 #start_of_night_transition_time = 18000
 start_of_night_transition_time = 300
+day_oscillation = 300
 
 
 start_of_night_transition = time(int(float(start_of_night_transition_hours)), int(float(start_of_night_transition_minutes)))
-end_of_night_transition = time(9,45)
-end_of_nothernlights = time(9, 50)
+start_of_daytime = time(int(float(start_of_day_hours)), int(float(start_of_day_light)))
+end_of_night_transition = time(18,00)
+end_of_nothernlights = time(18, 30)
 
 
 #Lights
-dayX = 0.4500
-dayY = 0.3500
+day_1_x = 0.4500
+day_1_y = 0.3500
+day_2_x = 0.5500
+day_2_y = 0.3200
 
-nightX = 0.5900
-nightY = 0.3800
+night_x = 0.5900
+night_y = 0.3800
 
 can_i_has_nothernlights = False
+day_sequence = 1
 
-start_of_night_light = {'transitiontime' : (start_of_night_transition_time * 10), 'on' : True, 'bri' : 0, 'xy' : [nightX, nightY]}
+start_of_night_light = {'transitiontime' : (start_of_night_transition_time * 10), 'on' : True, 'bri' : 0, 'xy' : [night_x, night_y]}
 
-night_time_light = {'on' : False, 'bri' : 0, 'xy' : [dayX, dayY]}
-day_time_light = {'on' : True, 'bri' : 254, 'xy' : [dayX, dayY]}
+night_time_light = {'on' : False, 'bri' : 0, 'xy' : [day_1_x, day_1_y]}
+day_1_time_light = {'transitiontime' : (day_oscillation * 10), 'on' : True, 'bri' : 254, 'xy' : [day_1_x, day_1_y]}
+day_2_time_light = {'transitiontime' : (day_oscillation * 10), 'on' : True, 'bri' : 100, 'xy' : [day_2_x, day_2_y]}
+
 
 end_of_day_time = "T" + start_of_night_transition_hours + ":" + start_of_night_transition_minutes + ":00"
 
 
 def bootstrap():
-    b.set_light([1,2,3,4,5], day_time_light)
+    b.set_light([1,2,3,4,5], day_1_time_light)
     planner()
     day_time_routine()
 
@@ -131,6 +139,22 @@ def northernlights_routine():
         threading.Timer((totalTime/10), northernlights_routine).start()
     else:
         return
+
+def daylight_routine():
+    global day_sequence
+
+
+    now__time = datetime.now().time()
+    if now__time > start_of_daytime and now__time < start_of_night_transition:
+        if day_sequence == 1:
+            day_sequence = 2
+            b.set_light([1,2,3,4,5], day_1_time_light)
+
+        else:
+            day_sequence = 1
+            b.set_light([1,2,3,4,5], day_2_time_light)
+
+
 
 #Do all routines
 bootstrap()
