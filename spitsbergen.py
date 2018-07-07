@@ -17,15 +17,15 @@ start_of_day_hours = "13"
 start_of_day_light = "00"
 start_of_night_transition_hours = "17"
 start_of_night_transition_minutes = "00"
-#start_of_night_transition_time = 18000
-start_of_night_transition_time = 300
+start_of_night_transition_time = 36000
+#start_of_night_transition_time = 300
 day_oscillation = 300
 
 
 start_of_night_transition = time(int(float(start_of_night_transition_hours)), int(float(start_of_night_transition_minutes)))
 start_of_daytime = time(int(float(start_of_day_hours)), int(float(start_of_day_light)))
 end_of_night_transition = time(18,00)
-end_of_nothernlights = time(18, 30)
+end_of_nothernlights = time(20, 30)
 
 
 #Lights
