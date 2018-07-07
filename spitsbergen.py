@@ -6,7 +6,6 @@ from numpy import random
 from random import randrange
 from datetime import datetime, time
 from time import gmtime, strftime
-import ast
 
 #Connection
 b = Bridge('192.168.2.3')
@@ -14,13 +13,16 @@ b.connect()
 
 #Timing
 
-start_of_night_transition_hours = "13"
-start_of_night_transition_minutes = "00"
-start_of_night_transition_time = 18000
 
-start_of_night_transition = time(ast.literal_eval(start_of_night_transition_hours), ast.literal_eval(start_of_night_transition_minutes))
-end_of_night_transition = time(18,00)
-end_of_nothernlights = time(18, 30)
+start_of_night_transition_hours = "09"
+start_of_night_transition_minutes = "40"
+#start_of_night_transition_time = 18000
+start_of_night_transition_time = 300
+
+
+start_of_night_transition = time(int(float(start_of_night_transition_hours)), int(float(start_of_night_transition_minutes)))
+end_of_night_transition = time(9,45)
+end_of_nothernlights = time(9, 50)
 
 
 #Lights
@@ -50,10 +52,11 @@ def bootstrap():
 def planner():
     b.delete_schedule(1)
     today = strftime("%Y-%m-%d", gmtime())
-    b.create_schedule('End of day', today + end_of_day_time, 1, start_of_night_light)
+    date_time = today + end_of_day_time
+    b.create_schedule('End of day', date_time, 1, start_of_night_light)
 
-    print("Planned new event for: " + today)
-    print("Duration : " + start_of_night_transition_time)
+    print("Planned new event for: " + date_time)
+    print("Duration : ")
 
     #rescedule this every 4 hours to be sure we queue up again on the right time
     threading.Timer(14400, planner).start()
@@ -67,7 +70,7 @@ def is_night(time_to_check):
         return False
 
     if time_to_check == end_of_night_transition:
-         return True
+        return True
 
     return True
 
@@ -131,4 +134,3 @@ def northernlights_routine():
 
 #Do all routines
 bootstrap()
-
