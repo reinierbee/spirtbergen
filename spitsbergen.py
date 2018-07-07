@@ -154,6 +154,8 @@ def daylight_routine():
             day_sequence = 1
             b.set_light([1,2,3,4,5], day_2_time_light)
 
+    threading.Timer(day_oscillation, planner).start()
+
 
 
 #Do all routines
