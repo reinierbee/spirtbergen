@@ -53,7 +53,8 @@ end_of_day_time = "T" + start_of_night_transition_hours + ":" + start_of_night_t
 def bootstrap():
     b.set_light([1,2,3,4,5], day_1_time_light)
     planner()
-    day_time_routine()
+    day_routine()
+    daylight_routine()
 
 
 #planner
@@ -82,8 +83,8 @@ def is_night(time_to_check):
 
     return True
 
-def day_time_routine():
-    threading.Timer(30.0, day_time_routine).start()
+def day_routine():
+    threading.Timer(30.0, day_routine).start()
     global can_i_has_nothernlights
 
     now__time = datetime.now().time()
@@ -146,6 +147,8 @@ def daylight_routine():
 
     now__time = datetime.now().time()
     if now__time > start_of_daytime and now__time < start_of_night_transition:
+        print("Daylight Sequence")
+
         if day_sequence == 1:
             day_sequence = 2
             b.set_light([1,2,3,4,5], day_1_time_light)
