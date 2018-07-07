@@ -135,8 +135,8 @@ def northernlights_routine():
         xlight = random.uniform(0.05, 0.20)
         ylight = random.uniform(0.65, 0.35)
         brightness = randrange(30,100)
-        flow_time = randrange(300,700)
-        dimmed_time = random.choice([0,0,0,0,0,0,0,10,10,20,30,100])
+        flow_time = randrange(30,70)
+        dimmed_time = random.choice([0,0,0,0,0,0,0,1,1,2,3,7])
         totalTime = flow_time
 
         northernlights_flow(xlight, ylight, brightness, flow_time)
