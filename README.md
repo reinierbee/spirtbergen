@@ -41,10 +41,7 @@ python spitsbergen.py
 
 ### Updating the code
 
-Open terminal 
-```
-ctrl+alt+t
-```
+Open command line terminal 
 
 Connect with ssh to raspberry pi device and enter the password
 ```
@@ -58,6 +55,7 @@ cd ~/pihue/spitsbergen
 
 Update code by pulling it from github
 ```
+git reset --hard
 git pull
 ```
 
