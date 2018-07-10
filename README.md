@@ -36,8 +36,9 @@ pip install phue
 ```
 
 ### Run
-
+```
 python spitsbergen.py
+```
 
 ### Updating the code
 
@@ -61,8 +62,9 @@ git pull
 
 run from command line (testing purposes) or reboot machine
 ```
-python spitsbergen.py
-```
-```
 reboot -i
+```
+OPTIONAL (NOT NEEDED, ONLY FOR TESTING PURPOSES!)
+```
+python spitsbergen.py
 ```
