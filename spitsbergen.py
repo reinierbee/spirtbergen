@@ -16,8 +16,8 @@ b.connect()
 start_of_day_hours = "13"
 start_of_day_light = "00"
 start_of_night_transition_hours = "17"
-start_of_night_transition_minutes = "00"
-start_of_night_transition_time = 36000
+start_of_night_transition_minutes = "30"
+start_of_night_transition_time = 18000
 #start_of_night_transition_time = 300
 day_oscillation = 300
 
